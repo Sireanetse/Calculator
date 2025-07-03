@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+    <body class="calculator-body">
+        <table border="1" class="calculator-table">
+            <tr>
+                <td colspan="4" class="display-cell">
+                    <input type="text" id="inputBox" value="0" class="display-box"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="digitButton" onclick="digitBtnPressed(7)">7</td>
+                <td class="digitButton" onclick="digitBtnPressed(8)">8</td>
+                <td class="digitButton" onclick="digitBtnPressed(9)">9</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('x')">x</td>
+            </tr>
+            <tr>
+                <td class="digitButton" onclick="digitBtnPressed(4)">4</td>
+                <td class="digitButton" onclick="digitBtnPressed(5)">5</td>
+                <td class="digitButton" onclick="digitBtnPressed(6)">6</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('-')">-</td>
+            </tr>
+            <tr>
+                <td class="digitButton" onclick="digitBtnPressed(1)">1</td>
+                <td class="digitButton" onclick="digitBtnPressed(2)">2</td>
+                <td class="digitButton" onclick="digitBtnPressed(3)">3</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('+')">+</td>
+            </tr>
+            <tr>
+                <td class="digitButton" colspan="2" onclick="digitBtnPressed(0)">0</td>
+                <td class="ACButton" onclick="btnACPressed()">AC</td>
+                <td class="operatorButton" onclick="operatorBtnPressed('/')">/</td>
+            </tr>
+            <tr>
+                <td class="operatorButton" colspan="4" onclick="equalBtnPressed()">=</td>
+            </tr>
+        </table>
+        <script>
+            let currentInput = '0';
+            let operator = null;
+            let operand = null;
+            let resetInput = false;
+
+            function updateDisplay() {
+                document.getElementById('inputBox').value = currentInput;
+            }
+
+            function digitBtnPressed(digit) {
+                if (resetInput) {
+                    currentInput = '';
+                    resetInput = false;
+                }
+                if (currentInput === '0') {
+                    currentInput = '' + digit;
+                } else {
+                    currentInput += digit;
+                }
+                updateDisplay();
+            }
+
+            function operatorBtnPressed(op) {
+                if (operator !== null && !resetInput) {
+                    equalBtnPressed();
+                }
+                operand = parseFloat(currentInput);
+                operator = op;
+                resetInput = true;
+            }
+
+            function btnACPressed() {
+                currentInput = '0';
+                operator = null;
+                operand = null;
+                resetInput = false;
+                updateDisplay();
+            }
+
+            function equalBtnPressed() {
+                if (operator && operand !== null) {
+                    let secondOperand = parseFloat(currentInput);
+                    let result = 0;
+                    switch (operator) {
+                        case '+': result = operand + secondOperand; break;
+                        case '-': result = operand - secondOperand; break;
+                        case 'x': result = operand * secondOperand; break;
+                        case '/': result = secondOperand !== 0 ? operand / secondOperand : 'Error'; break;
+                    }
+                    currentInput = result.toString();
+                    operator = null;
+                    operand = null;
+                    resetInput = true;
+                    updateDisplay();
+                }
+            }
+
+            updateDisplay();
+        </script>
+    </body>
+</html>
